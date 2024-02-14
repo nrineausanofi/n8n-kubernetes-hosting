@@ -1,3 +1,4 @@
+#!/bin/bash
 aws eks update-kubeconfig --region eu-west-1 --name w-c-eks-f-int
 alias k='kubectl'
 alias kgp='kubectl get pod -n n8n'
