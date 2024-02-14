@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
+    app.kubernetes.io/name: n8n # Ajouté ici
     service: n8n
   name: n8n
   namespace: n8n
@@ -9,12 +10,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
+      app.kubernetes.io/name: n8n
       service: n8n
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
+        app.kubernetes.io/name: n8n
         service: n8n
     spec:
       initContainers:
