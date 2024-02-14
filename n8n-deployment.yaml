@@ -6,11 +6,10 @@ metadata:
   name: n8n
   namespace: n8n
 spec:
-  serviceName: ""
+  replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: n8n
-  replicas: 1
+      service: n8n
   strategy:
     type: Recreate
   template:
