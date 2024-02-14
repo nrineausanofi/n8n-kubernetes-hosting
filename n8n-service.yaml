@@ -1,55 +1,25 @@
-apiVersion: v1
 kind: Service
 metadata:
-  namespace: n8n
   name: n8n
+  namespace: n8n
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: 'external'
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: 'ip'
+    service.beta.kubernetes.io/aws-load-balancer-scheme: 'internal'
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: 'http'
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: 'true'
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:eu-west-1:488440267176:certificate/1aedf797-d22d-4390-9ded-e98dd078036e
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: 'https'
+    external-dns.alpha.kubernetes.io/hostname: n8n.int.p488440267176.aws-emea.sanofi.com
+    service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "3600"
 spec:
   ports:
-    - port: 5678
+    - name: http
+      port: 80
       targetPort: 5678
       protocol: TCP
-  type: NodePort
+  type: LoadBalancer
   selector:
     app.kubernetes.io/name: n8n
----
-
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  namespace: n8n
-  name: n8n
-  annotations:
-    kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/scheme: internal
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:eu-west-1:488440267176:certificate/1aedf797-d22d-4390-9ded-e98dd078036e"
-    alb.ingress.kubernetes.io/ssl-redirect: '443' 
-    alb.ingress.kubernetes.io/backend-protocol: HTTP
-    alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=600
-    alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=1800
-    alb.ingress.kubernetes.io/success-codes: 200-300
-    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
-    alb.ingress.kubernetes.io/healthcheck-path: /ping
-    external-dns.alpha.kubernetes.io/hostname: n8n.int.p488440267176.aws-emea.sanofi.com
-    nginx.ingress.kubernetes.io/proxy-body-size: 200m
-    nginx.ingress.kubernetes.io/proxy-cache: "true"
-    nginx.ingress.kubernetes.io/proxy-cache-key: "$scheme$request_method$host$request_uri"
-    nginx.ingress.kubernetes.io/proxy-cache-valid: "200s"
-    nginx.ingress.kubernetes.io/proxy-cache-use-stale: "error timeout invalid_header updating http_500 http_502 http_503 http_504"
-    nginx.ingress.kubernetes.io/proxy-cache-path: "/tmp/nginx-cache"
-
-
-spec:
-  rules:
-    - http:
-        paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: n8n
-              port:
-                number: 5678
-
 
 
