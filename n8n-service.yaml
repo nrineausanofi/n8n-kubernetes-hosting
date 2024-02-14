@@ -27,7 +27,7 @@ metadata:
     alb.ingress.kubernetes.io/backend-protocol: HTTP
     alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=600
     alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=1800
-    alb.ingress.kubernetes.io/success-codes: 200-300
+    alb.ingress.kubernetes.io/success-codes: 200-300-401
     alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
     alb.ingress.kubernetes.io/healthcheck-path: /ping
     external-dns.alpha.kubernetes.io/hostname: n8n.int.p488440267176.aws-emea.sanofi.com
